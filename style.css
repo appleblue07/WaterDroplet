@@ -21,6 +21,16 @@ body{
     color:white;
 }
 
+.droplet{
+    position:absolute;
+
+    width:20px;
+    height:20px;
+
+    background:skyblue;
+    border-radius:50%;
+
+}
 
 #player{
 
