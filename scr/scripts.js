@@ -53,19 +53,48 @@ update();
 
 
 // // 랜덤으로 물방울 생성
-function CreateDroplet(){
+
+let dropletArr = [];
+
+function createDroplet(){
     if(check_gameStart){
         const droplet = document.createElement("div");
         droplet.className = "droplet";
         document.body.appendChild(droplet);
-
-        const x = Math.random() * 1000;
-        const y = Math.random() * 1000;
-        droplet.style.left = x + "px";
-        droplet.style.top = y + "px";
+        
+        const x = Math.random() * 1600;
+        const y = Math.random() * 900;
+        
+        const drop = {
+            element : droplet,
+            x : x,
+            y : y,
+            speed : 2
+        };
+        dropletArr.push(drop);
+        
+        droplet.style.left = drop.x + "px";
+        droplet.style.top = drop.y + "px";
     }
 }
 
-setInterval(CreateDroplet, 200);
+// 물방울 움직이기
+function dropletDrop(){
+    for(let i = dropletArr.length - 1 ; i >= 0 ; i--){
+        dropletArr[i].y -= dropletArr[i].speed;
+        if(dropletArr[i].y < 0) 
+        {
+            dropletArr[i].element.remove();   // 화면에서 삭제
+            dropletArr.splice(i, 1); // 배열에서 삭제
+        }
+        else dropletArr[i].element.style.top = dropletArr[i].y + "px";
+    }
+}
+setInterval(dropletDrop, 10);
+
+
+setInterval(createDroplet, 300);
+
+
 
 console.log("연결 완");
