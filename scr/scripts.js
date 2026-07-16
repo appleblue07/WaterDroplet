@@ -4,7 +4,11 @@ const startScreen = document.getElementById("startScreen");
 const gameScreen = document.getElementById("gameScreen");
 const playBtn = document.getElementById("playBtn");
 
+const gameArea = document.getElementById("gameArea");
+
 let check_gameStart = false;
+
+//let gameScore = 0;
 
 playBtn.addEventListener("click", () => {
     check_gameStart = true;
@@ -60,7 +64,7 @@ function createDroplet(){
     if(check_gameStart){
         const droplet = document.createElement("div");
         droplet.className = "droplet";
-        document.body.appendChild(droplet);
+        gameArea.appendChild(droplet);
         
         const x = Math.random() * 1600;
         const y = Math.random() * 900;
@@ -90,11 +94,42 @@ function dropletDrop(){
         else dropletArr[i].element.style.top = dropletArr[i].y + "px";
     }
 }
-setInterval(dropletDrop, 10);
+
+// 충돌 처리
+function checkCollision() {
+    const playerRect = player.getBoundingClientRect();
+
+    for (let i = dropletArr.length - 1; i >= 0; i--) {
+        const drop = dropletArr[i];
+        const dropRect = drop.element.getBoundingClientRect();
+
+        if (
+            playerRect.left < dropRect.right &&
+            playerRect.right > dropRect.left &&
+            playerRect.top < dropRect.bottom &&
+            playerRect.bottom > dropRect.top
+        ) {
+            // 화면에서 삭제
+            drop.element.remove();
+
+            // 배열에서 삭제
+            dropletArr.splice(i, 1);
+
+            console.log("충돌!");
+        }
+    }
+}
 
 
-setInterval(createDroplet, 300);
 
+//게임 루프
+function gameLoop(){
+    createDroplet();
+    dropletDrop();
+    checkCollision();
+    requestAnimationFrame(gameLoop);
+};
 
+gameLoop();
 
 console.log("연결 완");
